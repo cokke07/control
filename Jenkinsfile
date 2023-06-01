@@ -51,7 +51,7 @@ pipeline {
             script {
               def sonarqubeScannerHome = tool 'sonar'
               withSonarQubeEnv('sonar') {
-                sh "${sonarqubeScannerHome}/bin/sonar-scanner"
+                sh "${sonarqubeScannerHome}/bin/sonar-scanner -e -Dsonar.host.url=http://SonarQube:9000 -Dsonar.login=${sonarLogin} -Dsonar.projectName=mv-maven -Dsonar.projectVersion=${env.BUILD_NUMBER} -Dsonar.projectKey=GS"
               }
             }
           }
