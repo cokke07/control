@@ -77,7 +77,7 @@ stage('nexus') {
 
                                 nexusArtifactUploader(
 
-                                    nexusVersion: 'nexus3',
+                                    nexusVersion: '0.0.1-SNAPSHOT',
 
                                     protocol: 'http',
 
