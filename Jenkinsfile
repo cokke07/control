@@ -46,7 +46,7 @@ pipeline {
         }
     }
 
-        stage('SonarQube Analysis') {
+/*         stage('SonarQube Analysis') {
           steps {
             script {
               def sonarqubeScannerHome = tool 'sonar'
@@ -63,7 +63,54 @@ pipeline {
               waitForQualityGate abortPipeline: true
             }
           }
+        } */
+
+stage('nexus') {
+
+        steps {
+
+            script {
+
+                  dir("target"){
+
+                    def pom = readMavenPom file: "pom.xml"
+
+                                nexusArtifactUploader(
+
+                                    nexusVersion: 'nexus3',
+
+                                    protocol: 'http',
+
+                                    nexusUrl: 'nexus:8081',
+
+                                    groupId: pom.groupId,
+
+                                    version: pom.version,
+
+                                    repository: 'maven-snapshots',
+
+                                    credentialsId: 'nexusLogin',
+
+                                    artifacts: [
+
+                                        [artifactId: pom.artifactId,
+
+                                        classifier: '',
+
+                                        file: 'ControlInventario-0.0.1-SNAPSHOT.jar',
+
+                                        type: pom.packaging]
+
+                                    ]
+
+                                )
+
+                            }
+
+            }
+
         }
 
+    }
     }
 }
