@@ -50,7 +50,7 @@ pipeline {
           steps {
             script {
               def sonarqubeScannerHome = tool 'sonar'
-              withSonarQubeEnv('SonarQube Server') {
+              withSonarQubeEnv('sonar') {
                 sh "${sonarqubeScannerHome}/bin/sonar-scanner"
               }
             }
