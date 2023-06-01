@@ -24,7 +24,7 @@ public class App {
     System.out.println("La suma es: " + calculateSum(numbers));
 
     List<String> strings = Arrays.asList("hola", "mundo", "java", "8");
-    System.out.println("Las palabras en mayúsculas son: " + convertToUpperCase(strings)) ;
+    System.out.println("Las palabras en mayúsculas son: " + convertToUpperCase(strings));
   }
 
 }
