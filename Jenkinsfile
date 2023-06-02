@@ -45,13 +45,12 @@ pipeline {
             }
         }
     }
-
-/*         stage('SonarQube Analysis') {
+        stage('SonarQube Analysis') {
           steps {
             script {
-              def sonarqubeScannerHome = tool 'sonar'
+              def scannerHome = tool 'sonar'
               withSonarQubeEnv('sonar') {
-                sh "${sonarqubeScannerHome}/bin/sonar-scanner -e -Dsonar.host.url=http://SonarQube:9000 -Dsonar.login=${sonarLogin} -Dsonar.projectName=mv-maven -Dsonar.projectVersion=${env.BUILD_NUMBER} -Dsonar.projectKey=GS"
+                sh "${scannerHome}/bin/sonar-scanner"
               }
             }
           }
@@ -63,19 +62,7 @@ pipeline {
               waitForQualityGate abortPipeline: true
             }
           }
-        } */
-
-
-        stage('SonarQube Analysis') {
-            steps {
-                script {
-                    def scannerHome = tool 'sonar'
-                    withSonarQubeEnv('sonar') {
-                    sh "${scannerHome}/bin/sonar-scanner"
-                        }
-                    }
-                }
-            }
+        }
 
         stage('nexus') {
 
@@ -125,15 +112,4 @@ pipeline {
 
             }
     }
-    post {
-                    always {
-                        script {
-                            // Check the Quality Gate status
-                            def qg = waitForQualityGate()
-                            if (qg.status != 'OK') {
-                                error "Quality Gate failed: ${qg.status}"
-                            }
-                        }
-                    }
-                }
 }
