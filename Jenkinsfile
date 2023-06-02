@@ -45,24 +45,21 @@ pipeline {
             }
         }
     }
-        stage('SonarQube Analysis') {
-          steps {
-            script {
-              def scannerHome = tool 'sonar'
-              withSonarQubeEnv('sonarServer') {
-                sh "${scannerHome}/bin/sonar-scanner"
-              }
+        stage('Sonar Scanner') {
+            steps {
+                withSonarQubeEnv('sonarServer') {
+                    sh 'mvn sonar:sonar -Dsonar.projectKey=GS -Dsonar.sources=src/main/java/com/kibernumacademy/miapp -Dsonar.tests=src/test/java/com/kibernumacademy/miapp -Dsonar.language=java -Dsonar.java.binaries=.'
+                }
             }
-          }
         }
 
-        stage('Quality Gate') {
-          steps {
-            timeout(time: 1, unit: 'HOURS') {
-              waitForQualityGate abortPipeline: true
-            }
-          }
-        }
+         stage('Quality Gate'){
+               steps{
+                 timeout(time:1, unit:'HOURS'){
+                      waitForQualityGate abortPipeline:true
+                  }
+               }
+         }
 
         stage('nexus') {
 
