@@ -61,7 +61,7 @@ pipeline {
                }
          }
 
-        stage('nexus') {
+        /* stage('nexus') {
 
                 steps {
 
@@ -107,6 +107,6 @@ pipeline {
 
                      }
 
-            }
+            } */
     }
 }
