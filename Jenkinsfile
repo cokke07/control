@@ -65,52 +65,77 @@ pipeline {
           }
         } */
 
-stage('nexus') {
-
-        steps {
-
-            script {
-
-                  dir("target"){
-
-                    def pom = readMavenPom file: "pom.xml"
-
-                                nexusArtifactUploader(
-
-                                    nexusVersion: '0.0.1-SNAPSHOT',
-
-                                    protocol: 'http',
-
-                                    nexusUrl: 'nexus:8081',
-
-                                    groupId: pom.groupId,
-
-                                    version: pom.version,
-
-                                    repository: 'maven-snapshots',
-
-                                    credentialsId: 'nexusLogin',
-
-                                    artifacts: [
-
-                                        [artifactId: pom.artifactId,
-
-                                        classifier: '',
-
-                                        file: 'ControlInventario-0.0.1-SNAPSHOT.jar',
-
-                                        type: pom.packaging]
-
-                                    ]
-
-                                )
-
+        stages {
+                stage('SonarQube Analysis') {
+                    steps {
+                        script {
+                            def scannerHome = tool 'sonar'
+                            withSonarQubeEnv('sonar') {
+                                sh "${scannerHome}/bin/sonar-scanner"
                             }
-
+                        }
+                    }
+                }
             }
 
-        }
+            post {
+                always {
+                    script {
+                        // Check the Quality Gate status
+                        def qg = waitForQualityGate()
+                        if (qg.status != 'OK') {
+                            error "Quality Gate failed: ${qg.status}"
+                        }
+                    }
+                }
+            }
 
-    }
+        stage('nexus') {
+
+                steps {
+
+                    script {
+
+                          dir("target"){
+
+                            def pom = readMavenPom file: "pom.xml"
+
+                                        nexusArtifactUploader(
+
+                                            nexusVersion: '0.0.1-SNAPSHOT',
+
+                                            protocol: 'http',
+
+                                            nexusUrl: 'nexus:8081',
+
+                                            groupId: pom.groupId,
+
+                                            version: pom.version,
+
+                                            repository: 'maven-snapshots',
+
+                                            credentialsId: 'nexusLogin',
+
+                                            artifacts: [
+
+                                                [artifactId: pom.artifactId,
+
+                                                classifier: '',
+
+                                                file: 'ControlInventario-0.0.1-SNAPSHOT.jar',
+
+                                                type: pom.packaging]
+
+                                            ]
+
+                                        )
+
+                                    }
+
+                              }
+
+                     }
+
+            }
     }
 }
