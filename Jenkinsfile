@@ -65,26 +65,13 @@ pipeline {
           }
         } */
 
-        stages {
-                stage('SonarQube Analysis') {
-                    steps {
-                        script {
-                            def scannerHome = tool 'sonar'
-                            withSonarQubeEnv('sonar') {
-                                sh "${scannerHome}/bin/sonar-scanner"
-                            }
-                        }
-                    }
-                }
-            }
 
-            post {
-                always {
-                    script {
-                        // Check the Quality Gate status
-                        def qg = waitForQualityGate()
-                        if (qg.status != 'OK') {
-                            error "Quality Gate failed: ${qg.status}"
+        stage('SonarQube Analysis') {
+            steps {
+                script {
+                    def scannerHome = tool 'sonar'
+                    withSonarQubeEnv('sonar') {
+                    sh "${scannerHome}/bin/sonar-scanner"
                         }
                     }
                 }
@@ -138,4 +125,15 @@ pipeline {
 
             }
     }
+    post {
+                    always {
+                        script {
+                            // Check the Quality Gate status
+                            def qg = waitForQualityGate()
+                            if (qg.status != 'OK') {
+                                error "Quality Gate failed: ${qg.status}"
+                            }
+                        }
+                    }
+                }
 }
