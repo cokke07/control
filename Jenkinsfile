@@ -110,8 +110,8 @@ pipeline {
             } */
     }
     def COLOR_MAP = [
-    ‘SUCCESS’: ‘good’,
-    ‘FAILURE’:’danger’,
+    'SUCCESS': 'good',
+    'FAILURE':'danger',
     ]
 
     post{
