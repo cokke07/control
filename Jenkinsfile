@@ -1,3 +1,8 @@
+    def COLOR_MAP = [
+    'SUCCESS': 'good',
+    'FAILURE':'danger',
+    ]
+
 pipeline {
     agent any 
 
@@ -109,10 +114,6 @@ pipeline {
 
             } */
     }
-    def COLOR_MAP = [
-    'SUCCESS': 'good',
-    'FAILURE':'danger',
-    ]
 
     post{
     always{
